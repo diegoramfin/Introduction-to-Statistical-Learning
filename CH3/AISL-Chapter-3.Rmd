@@ -1,0 +1,187 @@
+---
+title: "AISL-Chapter-3"
+output: html_document
+---
+
+```{r}
+library(MASS)
+library(ISLR2)
+```
+
+```{r}
+head(Boston)
+```
+
+```{r}
+lm.fit <- lm(medv ~ lstat, data = Boston)
+```
+
+```{r}
+lm.fit
+```
+
+```{r}
+summary(lm.fit)
+```
+
+```{r}
+names(lm.fit)
+```
+
+```{r}
+coef(lm.fit)
+```
+
+```{r}
+confint(lm.fit)
+```
+
+```{r}
+predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),
+        interval = 'confidence')
+```
+
+```{r}
+predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),
+        interval = 'prediction')
+```
+
+```{r}
+plot(Boston$lstat, Boston$medv)
+abline(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit)
+```
+
+```{r}
+par(mfrow =c(1,2))
+plot(predict(lm.fit), residuals(lm.fit))
+plot(predict(lm.fit), rstudent(lm.fit))
+```
+
+```{r}
+plot(hatvalues(lm.fit))
+which.max(hatvalues(lm.fit))
+```
+
+```{r}
+# Multiple Linear Regression
+
+lm.fit <- lm(medv ~ lstat + age, data=Boston)
+summary(lm.fit)
+```
+
+```{r}
+lm.fit <- lm(medv ~., data=Boston) # Short-hand to add all data for the multiple linear regression, nice.
+summary(lm.fit)
+```
+
+```{r}
+summary(lm.fit)$r.sq
+summary(lm.fit)$sigma
+```
+
+```{r}
+library(car)
+vif(lm.fit)
+```
+
+```{r}
+lm.fit1 <- lm(medv ~ . -age, data = Boston)
+summary(lm.fit1)
+```
+
+```{r}
+# Alternative Approach
+lm.fit1 <- update(lm.fit, ~ . - age)
+summary(lm.fit1)
+```
+
+## Interaction Terms
+
+```{r}
+summary(lm(medv~ lstat + age, data = Boston))
+```
+
+# Non-linear Transformations of the Predictors
+
+```{r}
+lm.fit2 <- lm(medv ~ lstat + I(lstat^2), data= Boston)
+summary(lm.fit2)
+```
+
+```{r}
+lm.fit <- lm(medv ~ lstat, data = Boston)
+summary(lm.fit)
+```
+
+```{r}
+anova(lm.fit, lm.fit2)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit2)
+```
+
+```{r}
+lm.fit5 <- lm(medv ~ poly(lstat, 5), data = Boston)
+summary(lm.fit5)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit5)
+```
+
+```{r}
+lm.fit.log <- lm(medv ~ log(rm), data = Boston)
+summary(lm.fit.log)
+```
+
+## Qualitative Predictors
+
+```{r}
+head(Carseats)
+```
+
+```{r}
+lm.fit <- lm(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit)
+```
+
+```{r}
+attach(Carseats)
+contrasts(ShelveLoc)
+```
+
+## Writing Functions
+
+```{r}
+LoadLibraries <- function(){
+  library(ISLR2)
+  library(MASS)
+  print("The libraries have been loaded.")
+}
+```
+
+```{r}
+LoadLibraries
+```
+
+```{r}
+LoadLibraries()
+```
